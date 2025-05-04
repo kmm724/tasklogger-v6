@@ -1,13 +1,12 @@
 // /screens/HomeLaborer.tsx
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
-import ClockInOutButton from '../components/ClockInOutButton';
-import { AppContext } from '../context/AppContext';
+import { View, Text, Button, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { AppContext } from '../context/AppContext';
 
 export default function HomeLaborer() {
-  const { setActiveUser } = useContext(AppContext);
   const navigation = useNavigation();
+  const { setActiveUser } = useContext(AppContext);
 
   const handleLogout = () => {
     setActiveUser(null);
@@ -19,16 +18,18 @@ export default function HomeLaborer() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Laborer Dashboard</Text>
-      <ClockInOutButton />
+      <Text style={styles.title}>Laborer Dashboard</Text>
+      <Button title="Clock In / Out" onPress={() => navigation.navigate('ClockIn')} />
       <View style={styles.spacer} />
-      <Button title="Logout" onPress={handleLogout} />
+      <Button title="Send Message" onPress={() => navigation.navigate('SendMessage')} />
+      <View style={styles.spacer} />
+      <Button title="Back to Login" onPress={handleLogout} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, paddingTop: 60, alignItems: 'center' },
-  header: { fontSize: 22, fontWeight: 'bold', marginBottom: 20 },
-  spacer: { height: 40 },
+  container: { flex: 1, justifyContent: 'center', padding: 20 },
+  title: { fontSize: 24, marginBottom: 30, textAlign: 'center' },
+  spacer: { height: 20 },
 });
