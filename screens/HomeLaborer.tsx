@@ -10,10 +10,7 @@ export default function HomeLaborer() {
 
   const handleLogout = () => {
     setActiveUser(null);
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Login' }],
-    });
+    navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
   };
 
   return (
@@ -22,6 +19,8 @@ export default function HomeLaborer() {
       <Button title="Clock In / Out" onPress={() => navigation.navigate('ClockIn')} />
       <View style={styles.spacer} />
       <Button title="Send Message" onPress={() => navigation.navigate('SendMessage')} />
+      <View style={styles.spacer} />
+      <Button title="View Messages" onPress={() => navigation.navigate('ViewMessages')} />
       <View style={styles.spacer} />
       <Button title="Back to Login" onPress={handleLogout} />
     </View>

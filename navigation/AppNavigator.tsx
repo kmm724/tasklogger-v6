@@ -9,6 +9,7 @@ import HomeLaborer from '../screens/HomeLaborer';
 import ManageEmployeesScreen from '../screens/ManageEmployeesScreen';
 import ClockInScreen from '../screens/ClockInScreen';
 import SendMessageScreen from '../screens/SendMessageScreen';
+import ViewMessagesScreen from '../screens/ViewMessagesScreen';
 import LoginScreen from '../screens/LoginScreen';
 
 const Stack = createNativeStackNavigator();
@@ -24,6 +25,7 @@ export default function AppNavigator() {
         <Stack.Screen name="ManageEmployees" component={ManageEmployeesScreen} />
         <Stack.Screen name="ClockIn" component={ClockInScreen} />
         <Stack.Screen name="SendMessage" component={SendMessageScreen} />
+        <Stack.Screen name="ViewMessages" component={ViewMessagesScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
