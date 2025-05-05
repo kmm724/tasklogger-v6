@@ -32,6 +32,9 @@ export default function HomeGC() {
       <Button title="Payroll by Site" onPress={() => navigation.navigate('PayrollBySite')} />
       <View style={styles.spacer} />
 
+      <Button title="Export Payroll" onPress={() => navigation.navigate('PayrollExport')} />
+      <View style={styles.spacer} />
+
       <Button title="Back to Login" onPress={handleLogout} />
     </View>
   );

@@ -12,6 +12,7 @@ import SendMessageScreen from '../screens/SendMessageScreen';
 import ViewMessagesScreen from '../screens/ViewMessagesScreen';
 import PayrollSummaryScreen from '../screens/PayrollSummaryScreen';
 import PayrollBySiteScreen from '../screens/PayrollBySiteScreen';
+import PayrollExportScreen from '../screens/PayrollExportScreen';
 import LoginScreen from '../screens/LoginScreen';
 
 const Stack = createNativeStackNavigator();
@@ -30,6 +31,7 @@ export default function AppNavigator() {
         <Stack.Screen name="ViewMessages" component={ViewMessagesScreen} />
         <Stack.Screen name="PayrollSummary" component={PayrollSummaryScreen} />
         <Stack.Screen name="PayrollBySite" component={PayrollBySiteScreen} />
+        <Stack.Screen name="PayrollExport" component={PayrollExportScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
