@@ -29,6 +29,9 @@ export default function HomeGC() {
       <Button title="Payroll Summary" onPress={() => navigation.navigate('PayrollSummary')} />
       <View style={styles.spacer} />
 
+      <Button title="Payroll by Site" onPress={() => navigation.navigate('PayrollBySite')} />
+      <View style={styles.spacer} />
+
       <Button title="Back to Login" onPress={handleLogout} />
     </View>
   );
