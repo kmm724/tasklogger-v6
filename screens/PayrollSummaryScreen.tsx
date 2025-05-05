@@ -1,16 +1,28 @@
 // /screens/PayrollSummaryScreen.tsx
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, Button } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  Button,
+  StyleSheet,
+  Platform,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { useNavigation } from '@react-navigation/native';
 
 export default function PayrollSummaryScreen() {
   const [payrollData, setPayrollData] = useState([]);
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+  const [showStartPicker, setShowStartPicker] = useState(false);
+  const [showEndPicker, setShowEndPicker] = useState(false);
   const navigation = useNavigation();
 
   useEffect(() => {
     calculatePayroll();
-  }, []);
+  }, [startDate, endDate]);
 
   const calculatePayroll = async () => {
     const sessionData = await AsyncStorage.getItem('sessions');
@@ -22,25 +34,36 @@ export default function PayrollSummaryScreen() {
     const summary = {};
 
     sessions.forEach((session) => {
-      if (session.clockOut) {
-        const start = new Date(session.clockIn);
-        const end = new Date(session.clockOut);
-        const duration = (end - start) / (1000 * 60 * 60); // hours
-        const id = session.userId;
+      if (!session.clockOut) return;
 
-        if (!summary[id]) {
-          const employee = employees.find((e) => e.id === id);
-          summary[id] = {
-            name: employee?.name || 'Unknown',
-            rate: parseFloat(employee?.rate || 0),
-            totalHours: 0,
-            totalPay: 0,
-          };
-        }
+      const clockIn = new Date(session.clockIn);
+      const clockOut = new Date(session.clockOut);
 
-        summary[id].totalHours += duration;
-        summary[id].totalPay = summary[id].totalHours * summary[id].rate;
+      // Filter by date range
+      if (
+        (startDate && clockIn < startDate) ||
+        (endDate && clockOut > endDate)
+      ) {
+        return;
       }
+
+      const employee = employees.find((e) => e.id === session.userId);
+      if (!employee) return;
+
+      const duration = (clockOut - clockIn) / (1000 * 60 * 60); // hours
+
+      if (!summary[employee.id]) {
+        summary[employee.id] = {
+          name: employee.name,
+          rate: parseFloat(employee.rate || 0),
+          totalHours: 0,
+          totalPay: 0,
+        };
+      }
+
+      summary[employee.id].totalHours += duration;
+      summary[employee.id].totalPay =
+        summary[employee.id].totalHours * summary[employee.id].rate;
     });
 
     const formatted = Object.values(summary).map((entry) => ({
@@ -59,9 +82,53 @@ export default function PayrollSummaryScreen() {
     });
   };
 
+  const clearFilters = () => {
+    setStartDate(null);
+    setEndDate(null);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Payroll Summary</Text>
+
+      <View style={styles.filterRow}>
+        <Button
+          title={`Start Date: ${
+            startDate ? startDate.toLocaleDateString() : 'Any'
+          }`}
+          onPress={() => setShowStartPicker(true)}
+        />
+        <Button
+          title={`End Date: ${endDate ? endDate.toLocaleDateString() : 'Any'}`}
+          onPress={() => setShowEndPicker(true)}
+        />
+      </View>
+
+      <Button title="Clear Filters" onPress={clearFilters} />
+
+      {showStartPicker && (
+        <DateTimePicker
+          value={startDate || new Date()}
+          mode="date"
+          display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+          onChange={(event, selectedDate) => {
+            setShowStartPicker(false);
+            if (selectedDate) setStartDate(selectedDate);
+          }}
+        />
+      )}
+
+      {showEndPicker && (
+        <DateTimePicker
+          value={endDate || new Date()}
+          mode="date"
+          display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+          onChange={(event, selectedDate) => {
+            setShowEndPicker(false);
+            if (selectedDate) setEndDate(selectedDate);
+          }}
+        />
+      )}
 
       {payrollData.length === 0 ? (
         <Text style={styles.empty}>No payroll data available.</Text>
@@ -89,6 +156,12 @@ export default function PayrollSummaryScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20 },
   title: { fontSize: 24, marginBottom: 20, textAlign: 'center' },
+  filterRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+    gap: 10,
+  },
   empty: { textAlign: 'center', marginTop: 40 },
   card: {
     padding: 15,
