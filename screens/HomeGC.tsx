@@ -16,12 +16,19 @@ export default function HomeGC() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>GC Dashboard</Text>
+
       <Button title="Manage Employees" onPress={() => navigation.navigate('ManageEmployees')} />
       <View style={styles.spacer} />
+
       <Button title="Send Message" onPress={() => navigation.navigate('SendMessage')} />
       <View style={styles.spacer} />
+
       <Button title="View Messages" onPress={() => navigation.navigate('ViewMessages')} />
       <View style={styles.spacer} />
+
+      <Button title="Payroll Summary" onPress={() => navigation.navigate('PayrollSummary')} />
+      <View style={styles.spacer} />
+
       <Button title="Back to Login" onPress={handleLogout} />
     </View>
   );
