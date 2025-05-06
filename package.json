@@ -26,7 +26,8 @@
     "react-native-svg": "14.1.0",
     "react-native-web": "~0.19.12",
     "react-navigation": "^4.4.4",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "@react-native-community/datetimepicker": "7.7.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
